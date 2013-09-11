@@ -34,7 +34,7 @@
 	    android:text="Predict"
 		android:layout_height="wrap_content" 
 		android:layout_width="match_parent"
-		android:background="#FFF">
+		android:background="@drawable/brownbutton">
 	</Button>
 	
 	<TextView android:text="Current Tidal Prediction" 
