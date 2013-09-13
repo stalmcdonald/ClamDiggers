@@ -37,6 +37,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 public class TideActivity extends Activity { 
@@ -61,8 +62,8 @@ public class TideActivity extends Activity {
 	 
 	  /** Called when the activity is first created. */
 	        @Override
-	   public void onCreate(Bundle tidalcycle) {
-	           super.onCreate(tidalcycle);
+	   public void onCreate (final Bundle savedInstanceState) {
+	           super.onCreate(savedInstanceState);
 	           _context = this;
 	           _history = getHistory();
 	           Log.i("HISTORY READ",_history.toString());
@@ -120,7 +121,23 @@ public class TideActivity extends Activity {
 	        		   //adds base url + city entered by user +.json to complete correct url
 	        		   tempUrl = new String(baseURL + c + ".json");
 	        		    
-                       
+
+                       //saves instance
+	        		   if (savedInstanceState !=null){
+	        			   Log.d("Tide Activity", "Saved Instance");
+	        			   
+	        			   savedInstanceState.putString(tempUrl, c);
+	        			   savedInstanceState.putString("tidesite", "tideInfo");
+	        			   savedInstanceState.putString("calendar", "date");
+	        			   savedInstanceState.putString("tidepre", "tideType");
+	        			   savedInstanceState.putString("waveheight", "tideHeight");
+	        			   onSaveInstanceState(savedInstanceState);
+	        				   
+	        				   
+	        			   }
+	        		   
+	           
+	        		   
                        URL finalURL;                       
                        try{
                     	   //final url is displayed in logcat to show the right information is being pulled
@@ -256,8 +273,20 @@ public class TideActivity extends Activity {
             Log.e("JSON EXCEPTION", e.toString());
     }
     }
+    //onrestore
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState){
+    	super.onRestoreInstanceState(savedInstanceState);
+    	
+    }
+    //onresume
+    @Override
+    protected void onResume(){
+    	super.onResume();
+    	_history = getHistory();
+    	
+    }
     
-       
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         return inflater.inflate(R.layout.tide, container, false);
@@ -268,6 +297,8 @@ public class TideActivity extends Activity {
         
         view = view.findViewWithTag(R.id.class);
     }
+    
+    
     
 
 }//end activity

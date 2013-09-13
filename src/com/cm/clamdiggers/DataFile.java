@@ -23,6 +23,15 @@ import android.util.Log;
 public class DataFile {
 	//cache data internally
 	
+	
+public static String FILE_NAME2 = "tideInfo.txt";
+	
+public static String JSON_DATA = "type";
+public static String JSON_INFO = "tideInfo";
+public static String JSON_LOCATION = "tidesite";
+public static String JSON_DATE = "pretty";
+public static String JSON_SWELL = "height";
+	
 	//creating a history 
 	@SuppressWarnings("resource")
 	public static Boolean storeStringFile(Context context, String filename, String content, Boolean external){
@@ -128,5 +137,10 @@ public class DataFile {
 			Log.e("READ ERROR", "I/O ERROR");
 		}
 		return content;
+	}
+	public static String readStringFile(Context context, String FILE_NAME2,
+			boolean external) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
