@@ -107,6 +107,30 @@ public static String JSON_SWELL = "height";
 		}
 		return content;
 	}
+	 public static String readStringFile2(Context context, String filename){
+         String content = "";
+         try{
+
+                 FileInputStream fin = context.openFileInput(filename);
+                 BufferedInputStream bin = new BufferedInputStream(fin);
+                
+                 byte[] contentBytes = new byte[1024];
+                 int bytesRead = 0;
+                 StringBuffer contentBuffer = new StringBuffer();
+                
+                 while((bytesRead = bin.read(contentBytes)) != -1){
+                         content = new String(contentBytes,0,bytesRead);
+                         contentBuffer.append(content);
+                 }
+                 content = contentBuffer.toString();
+                 fin.close();
+         } catch (FileNotFoundException e){
+                 Log.e("readStringFile", filename + " file not found");
+         } catch (IOException e){
+                 Log.e("readStringFile", "I/O Error");
+         }
+         return content;
+ }
 	@SuppressWarnings("resource")
 	public static Object readObjectFile(Context context, String filename, Boolean external){
 		Object content = new Object();

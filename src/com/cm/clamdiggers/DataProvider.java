@@ -30,20 +30,21 @@ public class DataProvider extends ContentProvider {
 	public static class TideData implements BaseColumns{
 		
 		//set up uri definitions
-		public static final Uri TIDE_URI_A = Uri.parse("content://"+AUTH+"/"+"/itemsa");
-		public static final Uri TIDE_URI_B = Uri.parse("content://"+AUTH+"/"+"/itemsb");
-		public static final Uri TIDE_URI_C = Uri.parse("content://"+AUTH+"/"+"/itemsc");
-		public static final Uri TIDE_URI_D = Uri.parse("content://"+AUTH+"/"+"/itemsd");
+		public static final Uri TIDE_URI_ALL = Uri.parse("content://"+AUTH+"/"+"/items/all");// all tide types or tidetypes for 3 days
+//		public static final Uri TIDE_URI_A = Uri.parse("content://"+AUTH+"/"+"/items/location/");
+//		public static final Uri TIDE_URI_B = Uri.parse("content://"+AUTH+"/"+"/items/pretty/");
+		public static final Uri TIDE_URI_CURRENT = Uri.parse("content://"+AUTH+"/"+"/items/current/");
+		public static final Uri TIDE_URI_CLAMMERS = Uri.parse("content://"+AUTH+"/"+"/items/clammer/");
 		
 		
 		public static final String CONTENT_TYPE = "vnd.andoid.cursor.dir/vnd.cm.tide.item";
 		public static final String CONTENT_ITEM_TYPE = "vnd.andoid.cursor.item/vnd.cm.tide.item";
 		
 		//Define columns
-		public static final String LOCATION_COLUMN = "location";
-		public static final String CALENDAR_COLUMN = "calendar";
-		public static final String PREDICTION_COLUMN = "prediction";
-		public static final String SWELL_COLUMN = "swell";
+		public static final String LOCATION_COLUMN = "tideSite";//location 
+		public static final String CALENDAR_COLUMN = "pretty";//date
+		public static final String PREDICTION_COLUMN = "type";//lo/hi tide
+		public static final String SWELL_COLUMN = "height";//wave height
 		
 		//defining what columns to be returned
 		public static final String[] PROJECTION= { "_Id", LOCATION_COLUMN, CALENDAR_COLUMN,PREDICTION_COLUMN,SWELL_COLUMN};
@@ -56,14 +57,21 @@ public class DataProvider extends ContentProvider {
 	public static final int ITEMS = 1;//define items is the uri for returning all items collected from json string
     //permit items to be collected into string
 	public static final int ITEMS_ID = 2;//DB world index starts at 1
+	public static final int ITEMS_ALLTIDE_FILTER = 3;
+	public static final int ITEMS_CURRENTTIDE_FILTER = 4;
+	public static final int ITEMS_LOWTIDE_FILTER = 5;
 	
 	//create uri matcher
 	private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 	
 	//set static data up before execution of runtime to save start up time
 	static{
-		uriMatcher.addURI(AUTH, "items/", ITEMS);//return all items in JSON file collected
-		uriMatcher.addURI(AUTH, "items/abc", ITEMS_ID);//request items by index number
+		uriMatcher.addURI(AUTH, "items/all/", ITEMS);//return all items in JSON file collected
+		//uriMatcher.addURI(AUTH, "items/all/", ITEMS_ID);//request items by index number
+		
+		uriMatcher.addURI(AUTH, "/items/clammers/", ITEMS_LOWTIDE_FILTER);//gets current tide
+		uriMatcher.addURI(AUTH, "/items/current/", ITEMS_CURRENTTIDE_FILTER);//cycles through all low tides for the city
+		uriMatcher.addURI(AUTH, "/items/all/", ITEMS_ALLTIDE_FILTER);//provides all tide data
 	}
 
 //CAUSES ERROR	
@@ -85,6 +93,22 @@ public class DataProvider extends ContentProvider {
 			return TideData.CONTENT_TYPE;
 			
 		case ITEMS_ID:
+		case ITEMS_LOWTIDE_FILTER:
+		
+			String lowTideFiltered = uri.getLastPathSegment();
+			//Log.e("Request low tides: " +lowTideFiltered);
+			
+			JSONArray recordArray = null;
+			
+			for (int i = 0; i < recordArray.length(); i++);
+			{
+				//try{
+					//field = recordArray.getJSONObject(i).getJSONObject(DbHelper.JSON_DATA);
+				//}
+			}
+			
+		case ITEMS_CURRENTTIDE_FILTER:
+		
 			return TideData.CONTENT_ITEM_TYPE;
 		}
 		return null;
@@ -110,9 +134,10 @@ public class DataProvider extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
 		
+		String TAG = "URI MATCHER";
 		MatrixCursor result = new MatrixCursor(TideData.PROJECTION);
 		
-		String JSONString = DataFile.readStringFile(getContext(), DataFile.FILE_NAME2, false);//make sure have data stored to have something to return
+		String JSONString = DataFile.readStringFile2(getContext(), "tideInfo.txt");//make sure have data stored to have something to return
 		JSONObject job = null;
 		JSONArray recordArray = null;//tideSummary
 		JSONObject field = null;
@@ -127,9 +152,12 @@ public class DataProvider extends ContentProvider {
 
 		try {
 		job = new JSONObject(JSONString);
-		
-		    recordArray = job.getJSONObject("tide").getJSONArray("tideSummary");
-			recordArray = job.getJSONArray(DbHelper.JSON_SUMMARY);
+		recordArray = tide.getJSONArray(DbHelper.JSON_DATE);//("date");
+//		    recordArray = job.getJSONObject("tide").getJSONArray("tideSummary");
+//			recordArray = job.getJSONArray(DbHelper.JSON_SUMMARY);
+//			result.addRow(new Object[] { i + 1, field.get(DbHelper.JSON_DATE),field.get(DbHelper.JSON_PRETTY),field.get(DbHelper.JSON_DATA),
+//					field.get(DbHelper.JSON_SWELL)});
+			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -137,16 +165,26 @@ public class DataProvider extends ContentProvider {
 		
 		if (recordArray == null)
 		{
+			Log.e("query", "null array");
 			return result;
 		}
 		
 		switch (uriMatcher.match(uri)){
 		case ITEMS:
+			Log.i(TAG, "items");
 			for(int i = 0; i < recordArray.length(); i++) {
 				{
 					try {
 						Log.i("recordArray",recordArray.getJSONObject(i).toString());
+						//parsing JSON Data here
 						field = recordArray.getJSONObject(i).getJSONObject(DbHelper.JSON_SUMMARY);
+						Log.d("DATA PROVIDER", "field: " +field);
+						result.addRow(new Object[] { i + 1, field.get("tidesite"),
+								//field.getJSONObject("data"),//drill into object to get prediction/wave height 
+								field.get("type"),
+								field.get("type"),//prediction
+								field.get("height")});//swell/waveheight
+						
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -160,12 +198,19 @@ public class DataProvider extends ContentProvider {
 			for(int i1 = 0; i1 < locArray.length(); i1++) {
 				try {
 					Log.i("locArray",locArray.getJSONObject(i1).toString());
+					
+					//if(field.getString(new Object[] { i1 + 1, field.get(DbHelper.JSON_DATA);
+						//field.get(DbHelper.JSON_SWELL)}));
 				} catch (JSONException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
+			break;
+		default:
+			Log.e("query", "uri not valid: " + uri.toString());
 		}
+		
 		return result;
 			
 		}
