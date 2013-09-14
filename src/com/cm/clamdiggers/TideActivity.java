@@ -63,7 +63,7 @@ public class TideActivity extends Activity {
 	 
 	 //checks network connection
 	 Boolean _connected = false;//want to assume not connected
-	 private Button b, bAll, bLow;  //global button
+	 private Button b, bAll, bLow, bQuery;  //global button
 	 
 	  /** Called when the activity is first created. */
 	        @Override
@@ -78,6 +78,7 @@ public class TideActivity extends Activity {
 	           b = (Button)findViewById(R.id.bPrediction);
 	           bAll = (Button)findViewById(R.id.bPredictionAll);
 	           bLow = (Button)findViewById(R.id.bPredictionLow);
+	           bQuery = (Button)findViewById(R.id.bPredictionQuery);
 	           
 	           etCity = (EditText)findViewById(R.id.etCity);
 	           
@@ -120,7 +121,7 @@ public class TideActivity extends Activity {
 	        				   super.handleMessage(msg);
 	        				   
 	        				   updateUI();
-	        				   //updateUI_CP();
+	        				   
 	        			   }
 	        		   };
 	        		   
@@ -352,7 +353,94 @@ public class TideActivity extends Activity {
                   }
             }
          });               
- }
+ 
+	        bQuery.setOnClickListener(new OnClickListener() {
+	       		
+	        	   //gets text entered in edit text and appends to textviews along with data pulled from json
+                @Override
+                public void onClick(View v) {
+                       
+                    // getting data and appending it to a string
+                    String c = etCity.getText().toString();
+                    String p = etCity.getText().toString();
+                    String w = etCity.getText().toString();
+                    StringBuilder URL = new StringBuilder(baseURL);
+                       
+                    // this hides the keyboard after user selects the predict button
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+	        		   imm.hideSoftInputFromWindow(b.getWindowToken(), 0);
+	        		   
+	        		 //Detects the network connection
+	        	  		_connected = WebFile.getConnectionStatus(_context);
+	        	  		if(_connected){
+	        	  			Log.i("NETWORK CONNECTION ", WebFile.getConnnectionType(_context));
+	        	  		}
+	        		
+	        		   
+	        		   //Callback Method
+	        		   Handler myHandler = new Handler(){
+	        			   
+	        			   public void handleMessage(Message msg){
+	        				   super.handleMessage(msg);
+	        				   
+	        				   //updateUI();
+	        				   updateUI_CP();
+	        			   }
+	        		   };
+	        		   
+	        		   //builds the url needed to pull data	
+	        		   String tempUrl = "";
+	        		   //adds base url + city entered by user +.json to complete correct url
+	        		   tempUrl = new String(baseURL + c + ".json");
+	        		    
+
+                    //saves instance
+	        		   if (savedInstanceState !=null){
+	        			   Log.d("Tide Activity", "Saved Instance");
+	        			   
+	        			   savedInstanceState.putString(tempUrl, c);
+	        			   savedInstanceState.putString("tidesite", "tideInfo");
+	        			   savedInstanceState.putString("calendar", "date");
+	        			   savedInstanceState.putString("tidepre", "tideType");
+	        			   savedInstanceState.putString("waveheight", "tideHeight");
+	        			   onSaveInstanceState(savedInstanceState);
+	        				   
+	        				   
+	        			   }
+	        		   
+	           
+	        		   
+                    URL finalURL;                       
+                    try{
+                 	   //final url is displayed in logcat to show the right information is being pulled
+                 	   finalURL = new URL(tempUrl);
+                 	   Log.i("FINAL URL", finalURL.toString());
+                 	   
+                 	   Messenger myMessenger = new Messenger(myHandler);
+                 	   Intent myIntent = new Intent(_context, Service.class);
+                 	   myIntent.putExtra("messenger", myMessenger);
+                 	   myIntent.putExtra("tidal_city", c);
+                 	   myIntent.putExtra("final_URL", finalURL.toString());
+                 	   Log.i("TIDE ACTIVITY", "Starting Service");
+                 	   
+                 	   //start the service the handleMessage method wont be called yet
+                 	   startService(myIntent);
+                        tvPrediction.setText("The best time to go clam digging is when there is a low tide. ");
+                         
+                  } catch (MalformedURLException e){
+                 
+                          Log.e("BAD URL", "MALFORMED URL");
+                          tvCity.setText("Can not provide information at this time");
+                          tvPrediction.setText( p + " Tide Prediction: UNKNOWN");
+                          tvWater.setText(w + ": Location: UNKOWN");
+                          etCity.setText(URL);
+                  } finally {
+                          // This is done even if try block fails
+                              Log.i("LOG", "I have hit the finally statement");
+                  }
+            }
+         });
+	        }
 	
 	public String dataToString(){
 		return "In " + etCity + " The tide prediction: High";
@@ -404,33 +492,33 @@ public class TideActivity extends Activity {
     }
     
     public void updateUI_CP(Uri uri){
-//    	Uri uri = Uri.parse("content://com.cm.clamdiggers.DataProvider/items/current/");//(TIDE_URI_CURRENT);
-//    	Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-//    	if (cursor == null)
-//    	{
-//    		Toast.makeText(this, "Cursor is null", Toast.LENGTH_LONG).show();
-//    		Log.e("NullCursor", uri.toString());
-//    	}else{ 
-//    		
-//    		Log.e("CursorCount", String.valueOf(cursor.getCount()));
-//    		
-//    		if (cursor.moveToFirst() == true)
-//    		{
-//    			for (int i = 0; i < cursor.getCount(); i++)
-//    		{
-//    				tidesite.setText("tideSite", cursor.getString(1));//swell
-//    				calendar.setText("pretty", cursor.getString(2));//swell
-//    				tidepre.setText("type", cursor.getString(3));//swell
-//    				waveheight.setText("height", cursor.getString(4));//swell	
-//    				
-//    				cursor.moveToNext();
-//    		}
-////    			queryInfo.setTextColor(this.getResources().getColor(R.color.black));
-//    		
-//    		}
-//    		cursor.close();
+    	uri = Uri.parse("content://com.cm.clamdiggers.DataProvider/items/current/");//(TIDE_URI_CURRENT);
+    	Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+    	if (cursor == null)
+    	{
+    		Toast.makeText(this, "Cursor is null", Toast.LENGTH_LONG).show();
+    		Log.e("NullCursor", uri.toString());
+    	}else{ 
+    		
+    		Log.e("CursorCount", String.valueOf(cursor.getCount()));
+    		
+    		if (cursor.moveToFirst() == true)
+    		{
+    			for (int i = 0; i < cursor.getCount(); i++)
+    		{
+    				tidesite.setText("tideSite", cursor.getString(1));//swell
+    				calendar.setText("pretty", cursor.getString(2));//swell
+    				tidepre.setText("type", cursor.getString(3));//swell
+    				waveheight.setText("height", cursor.getString(4));//swell	
+    				
+    				cursor.moveToNext();
+    		}
+//    			queryInfo.setTextColor(this.getResources().getColor(R.color.black));
+    		
+    		}
+    		cursor.close();
     	}
-
+    }
     
     //code now inside content provider...reading files and getting different fields
     //data read from file and updated here to the UI
