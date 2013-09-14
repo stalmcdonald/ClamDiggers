@@ -53,6 +53,14 @@
 		android:background="@drawable/brownbutton">
 	</Button>
 	
+	<Button 
+	    android:id="@+id/bPredictionQuery" 
+	    android:text="Get All Tide Info"
+		android:layout_height="wrap_content" 
+		android:layout_width="match_parent"
+		android:background="@drawable/texturedbttn">
+	</Button>
+	
 	<TextView android:text="Current Tidal Prediction" 
 	    android:id="@+id/tvPrediction"
 		android:textAppearance="?android:attr/textAppearanceLarge"
