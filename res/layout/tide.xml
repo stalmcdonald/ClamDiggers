@@ -31,7 +31,23 @@
 	
 	<Button 
 	    android:id="@+id/bPrediction" 
-	    android:text="Predict"
+	    android:text="Get Current Tide"
+		android:layout_height="wrap_content" 
+		android:layout_width="match_parent"
+		android:background="@drawable/brownbutton">
+	</Button>
+	
+	<Button 
+	    android:id="@+id/bPredictionAll" 
+	    android:text="Get Evening Tide"
+		android:layout_height="wrap_content" 
+		android:layout_width="match_parent"
+		android:background="@drawable/texturedbttn">
+	</Button>
+	
+	<Button 
+	    android:id="@+id/bPredictionLow" 
+	    android:text="Get Coordinates"
 		android:layout_height="wrap_content" 
 		android:layout_width="match_parent"
 		android:background="@drawable/brownbutton">

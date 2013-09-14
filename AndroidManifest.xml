@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <service android:name="Service"></service>
-        <provider android:name="DataProvider" android:authorities='"com.cm.clamdiggers.DataProvider"' android:exported="true"></provider>
+        <provider android:name="DataProvider" android:authorities="com.cm.clamdiggers.DataProvider" android:exported="true"></provider>
     </application>
 
 </manifest>
