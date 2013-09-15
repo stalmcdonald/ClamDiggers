@@ -16,7 +16,6 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.MatrixCursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
@@ -84,6 +83,7 @@ public class DataProvider extends ContentProvider {
 		throw new UnsupportedOperationException();
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public String getType(Uri uri) {
 		// TODO Auto-generated method stub
@@ -95,6 +95,7 @@ public class DataProvider extends ContentProvider {
 		case ITEMS_ID:
 		case ITEMS_LOWTIDE_FILTER:
 		
+			@SuppressWarnings("unused")
 			String lowTideFiltered = uri.getLastPathSegment();
 			//Log.e("Request low tides: " +lowTideFiltered);
 			
@@ -141,18 +142,12 @@ public class DataProvider extends ContentProvider {
 		JSONObject job = null;
 		JSONArray recordArray = null;//tideSummary
 		JSONObject field = null;
-		JSONObject tide = null;
-		JSONObject data = null;
-		JSONObject height = null;
-		JSONObject date = null;
-		JSONObject pretty = null;
-		JSONObject type = null;
 		JSONArray locArray = null;//tideInfo
-		JSONObject tideInfo = null;
+
 
 		try {
 		job = new JSONObject(JSONString);
-		recordArray = tide.getJSONArray(DbHelper.JSON_DATE);//("date");
+		recordArray = job.getJSONObject(DbHelper.JSON_TIDE).getJSONArray("tideSummary");
 //		    recordArray = job.getJSONObject("tide").getJSONArray("tideSummary");
 //			recordArray = job.getJSONArray(DbHelper.JSON_SUMMARY);
 //			result.addRow(new Object[] { i + 1, field.get(DbHelper.JSON_DATE),field.get(DbHelper.JSON_PRETTY),field.get(DbHelper.JSON_DATA),
@@ -177,7 +172,7 @@ public class DataProvider extends ContentProvider {
 					try {
 						Log.i("recordArray",recordArray.getJSONObject(i).toString());
 						//parsing JSON Data here
-						field = recordArray.getJSONObject(i).getJSONObject(DbHelper.JSON_SUMMARY);
+						field = recordArray.getJSONObject(i).getJSONObject(DbHelper.JSON_DATA);
 						Log.d("DATA PROVIDER", "field: " +field);
 						result.addRow(new Object[] { i + 1, field.get("tidesite"),
 								//field.getJSONObject("data"),//drill into object to get prediction/wave height 
@@ -202,7 +197,7 @@ public class DataProvider extends ContentProvider {
 					//if(field.getString(new Object[] { i1 + 1, field.get(DbHelper.JSON_DATA);
 						//field.get(DbHelper.JSON_SWELL)}));
 				} catch (JSONException e1) {
-					// TODO Auto-generated catch block
+					//  block
 					e1.printStackTrace();
 				}
 			}
