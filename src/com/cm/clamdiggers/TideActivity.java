@@ -26,20 +26,19 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,7 +65,8 @@ public class TideActivity extends Activity {
 	 private Button b, bAll, bLow, bQuery;  //global button
 	 
 	  /** Called when the activity is first created. */
-	        @Override
+	        @SuppressLint("HandlerLeak")
+			@Override
 	   public void onCreate (final Bundle savedInstanceState) {
 	           super.onCreate(savedInstanceState);
 	           _context = this;
@@ -94,13 +94,16 @@ public class TideActivity extends Activity {
 	           b.setOnClickListener(new OnClickListener() {
 	       		
 	        	   //gets text entered in edit text and appends to textviews along with data pulled from json
-                   @Override
+                   @SuppressLint("HandlerLeak")
+				@Override
                    public void onClick(View v) {
                           
                        // getting data and appending it to a string
                        String c = etCity.getText().toString();
-                       String p = etCity.getText().toString();
-                       String w = etCity.getText().toString();
+                       String cal = calendar.getText().toString();
+                       String ts = tidesite.getText().toString();
+                       String tp = tidepre.getText().toString();
+                       String wh = waveheight.getText().toString();
                        StringBuilder URL = new StringBuilder(baseURL);
                           
                        // this hides the keyboard after user selects the predict button
@@ -136,10 +139,10 @@ public class TideActivity extends Activity {
 	        			   Log.d("Tide Activity", "Saved Instance");
 	        			   
 	        			   savedInstanceState.putString(tempUrl, c);
-	        			   savedInstanceState.putString("tidesite", "tideInfo");
-	        			   savedInstanceState.putString("calendar", "date");
-	        			   savedInstanceState.putString("tidepre", "tideType");
-	        			   savedInstanceState.putString("waveheight", "tideHeight");
+	        			   savedInstanceState.putString("tidesite", ts);
+	        			   savedInstanceState.putString("calendar", cal);
+	        			   savedInstanceState.putString("tidepre", tp);
+	        			   savedInstanceState.putString("waveheight", wh);
 	        			   onSaveInstanceState(savedInstanceState);
 	        				   
 	        				   
@@ -168,8 +171,8 @@ public class TideActivity extends Activity {
                     
                              Log.e("BAD URL", "MALFORMED URL");
                              tvCity.setText("Can not provide information at this time");
-                             tvPrediction.setText( p + " Tide Prediction: UNKNOWN");
-                             tvWater.setText(w + ": Location: UNKOWN");
+                             tvPrediction.setText( tp + " Tide Prediction: UNKNOWN");
+                             tvWater.setText(ts + ": Location: UNKOWN");
                              etCity.setText(URL);
                      } finally {
                              // This is done even if try block fails
@@ -187,8 +190,10 @@ public class TideActivity extends Activity {
                        
                     // getting data and appending it to a string
                     String c = etCity.getText().toString();
-                    String p = etCity.getText().toString();
-                    String w = etCity.getText().toString();
+                    String cal = calendar.getText().toString();
+                    String ts = tidesite.getText().toString();
+                    String tp = tidepre.getText().toString();
+                    String wh = waveheight.getText().toString();
                     StringBuilder URL = new StringBuilder(baseURL);
                        
                     // this hides the keyboard after user selects the predict button
@@ -219,15 +224,15 @@ public class TideActivity extends Activity {
 	        		   tempUrl = new String(baseURL + c + ".json");
 	        		    
 
-                    //saves instance
+	        		 //saves instance
 	        		   if (savedInstanceState !=null){
 	        			   Log.d("Tide Activity", "Saved Instance");
 	        			   
 	        			   savedInstanceState.putString(tempUrl, c);
-	        			   savedInstanceState.putString("tidesite", "tidesite");
-	        			   savedInstanceState.putString("calendar", "date");
-	        			   savedInstanceState.putString("tidepre", "tidepre");
-	        			   savedInstanceState.putString("waveheight", "tideHeight");
+	        			   savedInstanceState.putString("tidesite", ts);
+	        			   savedInstanceState.putString("calendar", cal);
+	        			   savedInstanceState.putString("tidepre", tp);
+	        			   savedInstanceState.putString("waveheight", wh);
 	        			   onSaveInstanceState(savedInstanceState);
 	        				   
 	        				   
@@ -256,8 +261,8 @@ public class TideActivity extends Activity {
                  
                           Log.e("BAD URL", "MALFORMED URL");
                           tvCity.setText("Can not provide information at this time");
-                          tvPrediction.setText( p + " Tide Prediction: UNKNOWN");
-                          tvWater.setText(w + ": Location: UNKOWN");
+                          tvPrediction.setText( tp + " Tide Prediction: UNKNOWN");
+                          tvWater.setText(ts + ": Location: UNKOWN");
                           etCity.setText(URL);
                   } finally {
                           // This is done even if try block fails
@@ -270,13 +275,16 @@ public class TideActivity extends Activity {
 	           bLow.setOnClickListener(new OnClickListener() {
 	       		
 	        	   //gets text entered in edit text and appends to textviews along with data pulled from json
-                @Override
+                @SuppressLint("HandlerLeak")
+				@Override
                 public void onClick(View v3) {
                        
-                    // getting data and appending it to a string
+                	// getting data and appending it to a string
                     String c = etCity.getText().toString();
-                    String p = etCity.getText().toString();
-                    String w = etCity.getText().toString();
+                    String cal = calendar.getText().toString();
+                    String ts = tidesite.getText().toString();
+                    String tp = tidepre.getText().toString();
+                    String wh = waveheight.getText().toString();
                     StringBuilder URL = new StringBuilder(baseURL);
                        
                     // this hides the keyboard after user selects the predict button
@@ -307,15 +315,15 @@ public class TideActivity extends Activity {
 	        		   tempUrl = new String(baseURL + c + ".json");
 	        		    
 
-                    //saves instance
+	        		 //saves instance
 	        		   if (savedInstanceState !=null){
 	        			   Log.d("Tide Activity", "Saved Instance");
 	        			   
 	        			   savedInstanceState.putString(tempUrl, c);
-	        			   savedInstanceState.putString("tidesite", "tide");
-	        			   savedInstanceState.putString("calendar", "date");
-	        			   savedInstanceState.putString("tidepre", "tideType");
-	        			   savedInstanceState.putString("waveheight", "tideHeight");
+	        			   savedInstanceState.putString("tidesite", ts);
+	        			   savedInstanceState.putString("calendar", cal);
+	        			   savedInstanceState.putString("tidepre", tp);
+	        			   savedInstanceState.putString("waveheight", wh);
 	        			   onSaveInstanceState(savedInstanceState);
 	        				   
 	        				   
@@ -344,8 +352,8 @@ public class TideActivity extends Activity {
                  
                           Log.e("BAD URL", "MALFORMED URL");
                           tvCity.setText("Can not provide information at this time");
-                          tvPrediction.setText( p + " Tide Prediction: UNKNOWN");
-                          tvWater.setText(w + ": Location: UNKOWN");
+                          tvPrediction.setText( tp + " Tide Prediction: UNKNOWN");
+                          tvWater.setText(ts + ": Location: UNKOWN");
                           etCity.setText(URL);
                   } finally {
                           // This is done even if try block fails
@@ -353,17 +361,21 @@ public class TideActivity extends Activity {
                   }
             }
          });               
- 
-	        bQuery.setOnClickListener(new OnClickListener() {
+	           
+	           //Accesses Content Provider to display information 
+	           bQuery.setOnClickListener(new OnClickListener() {
 	       		
 	        	   //gets text entered in edit text and appends to textviews along with data pulled from json
-                @Override
+                @SuppressLint("HandlerLeak")
+				@Override
                 public void onClick(View v) {
                        
-                    // getting data and appending it to a string
+                	// getting data and appending it to a string
                     String c = etCity.getText().toString();
-                    String p = etCity.getText().toString();
-                    String w = etCity.getText().toString();
+                    String cal = calendar.getText().toString();
+                    String ts = tidesite.getText().toString();
+                    String tp = tidepre.getText().toString();
+                    String wh = waveheight.getText().toString();
                     StringBuilder URL = new StringBuilder(baseURL);
                        
                     // this hides the keyboard after user selects the predict button
@@ -384,7 +396,7 @@ public class TideActivity extends Activity {
 	        				   super.handleMessage(msg);
 	        				   
 	        				   //updateUI();
-	        				   updateUI_CP();
+	        				   updateUI_CP(null);
 	        			   }
 	        		   };
 	        		   
@@ -394,15 +406,15 @@ public class TideActivity extends Activity {
 	        		   tempUrl = new String(baseURL + c + ".json");
 	        		    
 
-                    //saves instance
+	        		 //saves instance
 	        		   if (savedInstanceState !=null){
 	        			   Log.d("Tide Activity", "Saved Instance");
 	        			   
 	        			   savedInstanceState.putString(tempUrl, c);
-	        			   savedInstanceState.putString("tidesite", "tideInfo");
-	        			   savedInstanceState.putString("calendar", "date");
-	        			   savedInstanceState.putString("tidepre", "tideType");
-	        			   savedInstanceState.putString("waveheight", "tideHeight");
+	        			   savedInstanceState.putString("tidesite", ts);
+	        			   savedInstanceState.putString("calendar", cal);
+	        			   savedInstanceState.putString("tidepre", tp);
+	        			   savedInstanceState.putString("waveheight", wh);
 	        			   onSaveInstanceState(savedInstanceState);
 	        				   
 	        				   
@@ -431,8 +443,8 @@ public class TideActivity extends Activity {
                  
                           Log.e("BAD URL", "MALFORMED URL");
                           tvCity.setText("Can not provide information at this time");
-                          tvPrediction.setText( p + " Tide Prediction: UNKNOWN");
-                          tvWater.setText(w + ": Location: UNKOWN");
+                          tvPrediction.setText( tp + " Tide Prediction: UNKNOWN");
+                          tvWater.setText(ts + ": Location: UNKOWN");
                           etCity.setText(URL);
                   } finally {
                           // This is done even if try block fails
@@ -440,16 +452,11 @@ public class TideActivity extends Activity {
                   }
             }
          });
-	        }
+	        }//end onCreate
 	
 	public String dataToString(){
 		return "In " + etCity + " The tide prediction: High";
-	}
-	
-//	private JSONObject JSONObject(String result) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+	}//end
 
 
 	//create method to get history from Hard drive
@@ -465,7 +472,7 @@ public class TideActivity extends Activity {
     		history = (HashMap<String, String>)stored;
     	}
     	return history;
-    }
+    }//end Hashmap
     
     @SuppressWarnings("unused")
 	private class LocRequest extends AsyncTask<URL,Void,String>{
@@ -489,9 +496,11 @@ public class TideActivity extends Activity {
        		Log.i("JSON RESULTS", result);
        		
     	} 		
-    }
+    }//end locquest
     
     public void updateUI_CP(Uri uri){
+    	@SuppressWarnings("unused")
+		String JSONString = DataFile.readStringFile2(_context, "tideInfo.txt");
     	uri = Uri.parse("content://com.cm.clamdiggers.DataProvider/items/current/");//(TIDE_URI_CURRENT);
     	Cursor cursor = getContentResolver().query(uri, null, null, null, null);
     	if (cursor == null)
@@ -506,10 +515,10 @@ public class TideActivity extends Activity {
     		{
     			for (int i = 0; i < cursor.getCount(); i++)
     		{
-    				tidesite.setText("tideSite", cursor.getString(1));//swell
-    				calendar.setText("pretty", cursor.getString(2));//swell
-    				tidepre.setText("type", cursor.getString(3));//swell
-    				waveheight.setText("height", cursor.getString(4));//swell	
+    				tidesite.setText("tideSite"); //cursor.getString(1));//location
+    				calendar.setText("pretty");// cursor.getString(2));//date
+    				tidepre.setText("type");//cursor.getString(3)); //prediction
+    				waveheight.setText("height");//swell	
     				
     				cursor.moveToNext();
     		}
@@ -518,7 +527,7 @@ public class TideActivity extends Activity {
     		}
     		cursor.close();
     	}
-    }
+    }//end updateUI_CP
     
     //code now inside content provider...reading files and getting different fields
     //data read from file and updated here to the UI
@@ -587,7 +596,6 @@ public class TideActivity extends Activity {
     	        String tideInfo = null;
     	        String date = null;
     	        String tideType = null; 
-    	        String tide = null;
     	        
     	        //drilling down into the object TIDE to get tideInfo array which holds 
     	        //the field to get tideSite information and the array tideSummary to get the object data to get
@@ -691,15 +699,23 @@ public class TideActivity extends Activity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState){
     	super.onRestoreInstanceState(savedInstanceState);
-    	
-    }
+    	if(savedInstanceState.getString(baseURL) !=null){
+    		((TextView) findViewById(R.id.etCity)).setText(savedInstanceState.getString("tempUrl"));
+    		((TextView) findViewById(R.id.tidesite)).setText(savedInstanceState.getString("tidesite"));
+    		((TextView) findViewById(R.id.calendar)).setText(savedInstanceState.getString("calendar"));
+    		((TextView) findViewById(R.id.tidepre)).setText(savedInstanceState.getString("tidepre"));
+    		((TextView) findViewById(R.id.waveheight)).setText(savedInstanceState.getString("waveheight"));
+    	}
+    	_history = getHistory();
+    }//end onRestore
+    
     //onresume
     @Override
     protected void onResume(){
     	super.onResume();
     	_history = getHistory();
     	
-    }
+    }//end onResume
     
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {

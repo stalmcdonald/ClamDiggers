@@ -1,6 +1,6 @@
 package com.cm.clamdiggers;
 
-import android.content.Context;
+//import android.content.Context;
 
 public class DbHelper {
 
@@ -15,8 +15,8 @@ public class DbHelper {
 	public static String JSON_DATE = "date";
 	public static String JSON_SWELL = "height";
 	
-	private final String tideURL = "http://api.wunderground.com/api/d4509f6df6f598a0/tide/q/WA/";
-	private Context _context;
+//	private final String tideURL = "http://api.wunderground.com/api/d4509f6df6f598a0/tide/q/WA/";
+//	private Context _context;
 	
 	
 	
