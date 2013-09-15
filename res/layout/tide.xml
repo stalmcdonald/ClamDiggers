@@ -28,20 +28,23 @@
 		android:id="@+id/etCity">
 		<requestFocus></requestFocus>
 	</EditText>
-	
-	<Button 
-	    android:id="@+id/bPrediction" 
-	    android:text="Get Current Tide"
-		android:layout_height="wrap_content" 
-		android:layout_width="match_parent"
-		android:background="@drawable/brownbutton">
-	</Button>
+
+	<Button
+	    android:id="@+id/bPrediction"
+	    android:align="center"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:background="@drawable/brownbutton"
+	    android:text="Get Current Tide" />
 	
 	<Button 
 	    android:id="@+id/bPredictionAll" 
 	    android:text="Get Evening Tide"
 		android:layout_height="wrap_content" 
 		android:layout_width="match_parent"
+		android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="2dp"
 		android:background="@drawable/texturedbttn">
 	</Button>
 	
@@ -50,6 +53,9 @@
 	    android:text="Get Coordinates"
 		android:layout_height="wrap_content" 
 		android:layout_width="match_parent"
+		android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="2dp"
 		android:background="@drawable/brownbutton">
 	</Button>
 	
@@ -58,6 +64,9 @@
 	    android:text="Get All Tide Info"
 		android:layout_height="wrap_content" 
 		android:layout_width="match_parent"
+		android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="2dp"
 		android:background="@drawable/texturedbttn">
 	</Button>
 	
