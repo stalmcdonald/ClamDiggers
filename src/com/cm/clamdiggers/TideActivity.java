@@ -28,6 +28,8 @@ import android.os.Message;
 import android.os.Messenger;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -110,10 +112,18 @@ public class TideActivity extends Activity {
                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 	        		   imm.hideSoftInputFromWindow(b.getWindowToken(), 0);
 	        		   
-	        		 //Detects the network connection
+	        		   //Detects the network connection
 	        	  		_connected = WebFile.getConnectionStatus(_context);
 	        	  		if(_connected){
 	        	  			Log.i("NETWORK CONNECTION ", WebFile.getConnnectionType(_context));
+	        	  		}else{
+	        	  			//notified if user isnt connected to the internet
+	        	  			Context context = getApplicationContext();
+	        	  			CharSequence text = "No Network Detected";
+	        	  			int duration = Toast.LENGTH_SHORT;
+
+	        	  			Toast toast = Toast.makeText(context, text, duration);
+	        	  			toast.show();
 	        	  		}
 	        		
 	        		   
@@ -126,12 +136,20 @@ public class TideActivity extends Activity {
 	        				   updateUI();
 	        				   
 	        			   }
+
 	        		   };
 	        		   
 	        		   //builds the url needed to pull data	
 	        		   String tempUrl = "";
 	        		   //adds base url + city entered by user +.json to complete correct url
 	        		   tempUrl = new String(baseURL + c + ".json");
+	        		   if (tempUrl == null);
+	        		   Context context = getApplicationContext();
+       	  				CharSequence notify = "Please Enter City";
+       	  				int duration = Toast.LENGTH_SHORT;
+
+       	  				Toast toast = Toast.makeText(context, notify, duration);
+       	  				toast.show();
 	        		    
 
                        //saves instance
@@ -204,6 +222,14 @@ public class TideActivity extends Activity {
 	        	  		_connected = WebFile.getConnectionStatus(_context);
 	        	  		if(_connected){
 	        	  			Log.i("NETWORK CONNECTION ", WebFile.getConnnectionType(_context));
+	        	  		}else{
+	        	  			//notified if user isnt connected to the internet
+	        	  			Context context = getApplicationContext();
+	        	  			CharSequence text = "No Network Detected";
+	        	  			int duration = Toast.LENGTH_SHORT;
+
+	        	  			Toast toast = Toast.makeText(context, text, duration);
+	        	  			toast.show();
 	        	  		}
 	        		
 	        		   
@@ -222,6 +248,13 @@ public class TideActivity extends Activity {
 	        		   String tempUrl = "";
 	        		   //adds base url + city entered by user +.json to complete correct url
 	        		   tempUrl = new String(baseURL + c + ".json");
+	        		   if (tempUrl == null);
+	        		   Context context = getApplicationContext();
+       	  				CharSequence notify = "Please Enter City";
+       	  				int duration = Toast.LENGTH_SHORT;
+
+       	  				Toast toast = Toast.makeText(context, notify, duration);
+       	  				toast.show();
 	        		    
 
 	        		 //saves instance
@@ -295,6 +328,14 @@ public class TideActivity extends Activity {
 	        	  		_connected = WebFile.getConnectionStatus(_context);
 	        	  		if(_connected){
 	        	  			Log.i("NETWORK CONNECTION ", WebFile.getConnnectionType(_context));
+	        	  		}else{
+	        	  			//notified if user isnt connected to the internet
+	        	  			Context context = getApplicationContext();
+	        	  			CharSequence text = "No Network Detected";
+	        	  			int duration = Toast.LENGTH_SHORT;
+
+	        	  			Toast toast = Toast.makeText(context, text, duration);
+	        	  			toast.show();
 	        	  		}
 	        		
 	        		   
@@ -313,6 +354,13 @@ public class TideActivity extends Activity {
 	        		   String tempUrl = "";
 	        		   //adds base url + city entered by user +.json to complete correct url
 	        		   tempUrl = new String(baseURL + c + ".json");
+	        		   if (tempUrl == null);
+	        		   Context context = getApplicationContext();
+       	  				CharSequence notify = "Please Enter City";
+       	  				int duration = Toast.LENGTH_SHORT;
+
+       	  				Toast toast = Toast.makeText(context, notify, duration);
+       	  				toast.show();
 	        		    
 
 	        		 //saves instance
@@ -386,6 +434,14 @@ public class TideActivity extends Activity {
 	        	  		_connected = WebFile.getConnectionStatus(_context);
 	        	  		if(_connected){
 	        	  			Log.i("NETWORK CONNECTION ", WebFile.getConnnectionType(_context));
+	        	  		}else{
+	        	  			//notified if user isnt connected to the internet
+	        	  			Context context = getApplicationContext();
+	        	  			CharSequence text = "No Network Detected";
+	        	  			int duration = Toast.LENGTH_SHORT;
+
+	        	  			Toast toast = Toast.makeText(context, text, duration);
+	        	  			toast.show();
 	        	  		}
 	        		
 	        		   
@@ -404,6 +460,13 @@ public class TideActivity extends Activity {
 	        		   String tempUrl = "";
 	        		   //adds base url + city entered by user +.json to complete correct url
 	        		   tempUrl = new String(baseURL + c + ".json");
+	        		   if (tempUrl == null);
+	        		   Context context = getApplicationContext();
+       	  				CharSequence notify = "Please Enter City";
+       	  				int duration = Toast.LENGTH_SHORT;
+
+       	  				Toast toast = Toast.makeText(context, notify, duration);
+       	  				toast.show();
 	        		    
 
 	        		 //saves instance
